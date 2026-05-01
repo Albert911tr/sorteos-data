@@ -1,0 +1,36 @@
+name: Zygno Data Pipeline
+
+on:
+  schedule:
+    # 07:00 UTC es la 01:00 AM en CDMX
+    - cron: '0 7 * * *'
+  workflow_dispatch: # Botón manual por si quieres actualizar antes
+
+jobs:
+  update-data:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write # Permiso para que el bot pueda guardar los archivos
+    steps:
+      - name: Checkout del código
+        uses: actions/checkout@v4
+
+      - name: Configurar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: Instalar dependencias
+        run: |
+          pip install pandas requests
+
+      - name: Ejecutar transformación
+        run: python transformar_sorteos.py
+
+      - name: Guardar cambios en GitHub
+        run: |
+          git config --global user.name 'Zygno Update Bot'
+          git config --global user.email 'bot@zygno.com'
+          git add data/*.json
+          git commit -m "Actualización automática de sorteos - $(date)" || echo "No hay cambios para subir"
+          git push
