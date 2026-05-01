@@ -1,36 +1,29 @@
-name: Zygno Data Pipeline
+name: Zygno Data Transformer
 
 on:
-  schedule:
-    # 07:00 UTC es la 01:00 AM en CDMX
-    - cron: '0 7 * * *'
-  workflow_dispatch: # Botón manual por si quieres actualizar antes
+  push:
+    paths:
+      - 'raw_csv/**' # Se activa solo cuando subes un CSV nuevo
+  workflow_dispatch:
 
 jobs:
-  update-data:
+  build:
     runs-on: ubuntu-latest
     permissions:
-      contents: write # Permiso para que el bot pueda guardar los archivos
+      contents: write
     steps:
-      - name: Checkout del código
-        uses: actions/checkout@v4
-
-      - name: Configurar Python
-        uses: actions/setup-python@v5
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
         with:
           python-version: '3.10'
-
       - name: Instalar dependencias
-        run: |
-          pip install pandas requests
-
-      - name: Ejecutar transformación
+        run: pip install pandas
+      - name: Ejecutar script
         run: python transformar_sorteos.py
-
-      - name: Guardar cambios en GitHub
+      - name: Commit y Push
         run: |
-          git config --global user.name 'Zygno Update Bot'
+          git config --global user.name 'Zygno Bot'
           git config --global user.email 'bot@zygno.com'
           git add data/*.json
-          git commit -m "Actualización automática de sorteos - $(date)" || echo "No hay cambios para subir"
+          git commit -m "Update JSON from CSV: $(date)" || echo "Sin cambios"
           git push
