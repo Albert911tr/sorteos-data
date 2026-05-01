@@ -2,6 +2,7 @@ import pandas as pd
 import requests
 import json
 import os
+import io
 from datetime import datetime
 
 # URLs de descarga de la Lotería Nacional
@@ -11,23 +12,32 @@ SORTEOS = {
 }
 
 def procesar():
-    # Creamos la carpeta data si no existe
     if not os.path.exists('data'):
         os.makedirs('data')
+
+    # Simulamos ser un navegador para que no nos bloqueen
+    headers = {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
+    }
 
     for nombre, url in SORTEOS.items():
         try:
             print(f"Descargando {nombre}...")
-            response = requests.get(url, timeout=30)
-            csv_path = f"{nombre}_temp.csv"
-            with open(csv_path, 'wb') as f:
-                f.write(response.content)
+            response = requests.get(url, headers=headers, timeout=30)
+            
+            # Verificamos si la descarga fue exitosa
+            if response.status_code != 200:
+                print(f"❌ Error de servidor: Código {response.status_code}")
+                continue
 
-            df = pd.read_csv(csv_path)
+            # Usamos io.StringIO para leer el contenido directamente de la memoria
+            # y especificamos el separador por si acaso
+            df = pd.read_csv(io.StringIO(response.text))
+
+            # Limpieza de datos
             df['FECHA'] = pd.to_datetime(df['FECHA'], dayfirst=True).dt.strftime('%Y-%m-%d')
             df = df.sort_values(by='CONCURSO', ascending=False)
 
-            # Nombres de archivo finales dentro de /data
             filename = "data/resultados_melate.json" if nombre == "melate" else "data/resultados_chispazo.json"
             
             if nombre == "melate":
@@ -46,8 +56,7 @@ def procesar():
             with open(filename, 'w', encoding='utf-8') as f:
                 json.dump(resultado, f, ensure_ascii=False, indent=2)
 
-            print(f"✅ {filename} actualizado en /data.")
-            os.remove(csv_path)
+            print(f"✅ {filename} actualizado exitosamente.")
 
         except Exception as e:
             print(f"❌ Error en {nombre}: {e}")
