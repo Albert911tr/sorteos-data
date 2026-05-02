@@ -3,7 +3,7 @@ name: Zygno Data Transformer
 on:
   push:
     paths:
-      - 'raw_csv/**' # Se activa solo cuando subes un CSV nuevo
+      - 'raw_csv/**'
   workflow_dispatch:
 
 jobs:
@@ -24,6 +24,6 @@ jobs:
         run: |
           git config --global user.name 'Zygno Bot'
           git config --global user.email 'bot@zygno.com'
-          git add data/*.json
-          git commit -m "Update JSON from CSV: $(date)" || echo "Sin cambios"
+          git add docs/*.json
+          git commit -m "Update JSON in docs: $(date)" || echo "Sin cambios"
           git push
