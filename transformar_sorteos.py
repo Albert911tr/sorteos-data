@@ -4,11 +4,9 @@ import os
 from datetime import datetime
 
 def procesar():
-    # Nueva ruta de salida para GitHub Pages
     INPUT_DIR = 'raw_csv'
     OUTPUT_DIR = 'docs'
     
-    # Crea la carpeta docs si no existe
     if not os.path.exists(OUTPUT_DIR):
         os.makedirs(OUTPUT_DIR)
 
@@ -25,9 +23,8 @@ def procesar():
             continue
 
         try:
-            print(f"Procesando {nombre} desde {csv_path}...")
+            print(f"Procesando {nombre} con nueva estructura...")
             
-            # Intentar leer con diferentes codificaciones
             try:
                 df = pd.read_csv(csv_path, encoding='utf-8')
             except:
@@ -36,30 +33,38 @@ def procesar():
             # Limpiar nombres de columnas
             df.columns = [c.strip().upper() for c in df.columns]
             
-            # Formatear fecha para la App
+            # Formatear fecha
             df['FECHA'] = pd.to_datetime(df['FECHA'], dayfirst=True).dt.strftime('%Y-%m-%d')
             df = df.sort_values(by='CONCURSO', ascending=False)
 
+            json_final = []
+
+            for _, row in df.iterrows():
+                if nombre == "melate":
+                    # Estructura Melate Retro: 6 números + 1 adicional
+                    item = {
+                        "idConcurso": int(row['CONCURSO']),
+                        "fecha": row['FECHA'],
+                        "numeros": [int(row['F1']), int(row['F2']), int(row['F3']), 
+                                    int(row['F4']), int(row['F5']), int(row['F6'])],
+                        "adicional": int(row['F7'])
+                    }
+                else:
+                    # Estructura Chispazo: 5 números
+                    item = {
+                        "idConcurso": int(row['CONCURSO']),
+                        "fecha": row['FECHA'],
+                        "numeros": [int(row['R1']), int(row['R2']), int(row['R3']), 
+                                    int(row['R4']), int(row['R5'])]
+                    }
+                json_final.append(item)
+
+            # Guardar el archivo directamente como una lista [ {...}, {...} ]
             filename = f"{OUTPUT_DIR}/resultados_{nombre}.json"
-            
-            if nombre == "melate":
-                cols = ['CONCURSO', 'F1', 'F2', 'F3', 'F4', 'F5', 'F6', 'F7', 'FECHA']
-            else:
-                cols = ['CONCURSO', 'R1', 'R2', 'R3', 'R4', 'R5', 'FECHA']
-            
-            cols_finales = [c for c in cols if c in df.columns]
-            df = df[cols_finales]
-
-            resultado = {
-                "sorteo": nombre.upper(),
-                "ultima_actualizacion": datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
-                "datos": df.to_dict(orient='records')
-            }
-
             with open(filename, 'w', encoding='utf-8') as f:
-                json.dump(resultado, f, ensure_ascii=False, indent=2)
+                json.dump(json_final, f, ensure_ascii=False, indent=2)
 
-            print(f"✅ Archivo generado en: {filename}")
+            print(f"✅ Generado: {filename} con {len(json_final)} registros.")
 
         except Exception as e:
             print(f"❌ Error en {nombre}: {e}")
