@@ -1,5 +1,83 @@
 [
   {
+    "idConcurso": 1635,
+    "fecha": "2026-05-19",
+    "numeros": [
+      5,
+      6,
+      7,
+      15,
+      33,
+      38
+    ],
+    "adicional": 18
+  },
+  {
+    "idConcurso": 1634,
+    "fecha": "2026-05-16",
+    "numeros": [
+      5,
+      14,
+      15,
+      23,
+      25,
+      36
+    ],
+    "adicional": 13
+  },
+  {
+    "idConcurso": 1633,
+    "fecha": "2026-05-12",
+    "numeros": [
+      2,
+      3,
+      9,
+      28,
+      36,
+      38
+    ],
+    "adicional": 25
+  },
+  {
+    "idConcurso": 1632,
+    "fecha": "2026-05-09",
+    "numeros": [
+      1,
+      2,
+      13,
+      23,
+      30,
+      35
+    ],
+    "adicional": 24
+  },
+  {
+    "idConcurso": 1631,
+    "fecha": "2026-05-05",
+    "numeros": [
+      1,
+      4,
+      15,
+      24,
+      29,
+      33
+    ],
+    "adicional": 23
+  },
+  {
+    "idConcurso": 1630,
+    "fecha": "2026-05-02",
+    "numeros": [
+      3,
+      25,
+      33,
+      34,
+      35,
+      36
+    ],
+    "adicional": 20
+  },
+  {
     "idConcurso": 1629,
     "fecha": "2026-04-28",
     "numeros": [
