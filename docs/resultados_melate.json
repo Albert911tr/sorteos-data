@@ -1,5 +1,44 @@
 [
   {
+    "idConcurso": 1639,
+    "fecha": "2026-06-02",
+    "numeros": [
+      8,
+      12,
+      15,
+      19,
+      24,
+      25
+    ],
+    "adicional": 27
+  },
+  {
+    "idConcurso": 1638,
+    "fecha": "2026-05-30",
+    "numeros": [
+      9,
+      12,
+      14,
+      24,
+      35,
+      36
+    ],
+    "adicional": 2
+  },
+  {
+    "idConcurso": 1637,
+    "fecha": "2026-05-26",
+    "numeros": [
+      3,
+      12,
+      15,
+      17,
+      19,
+      36
+    ],
+    "adicional": 23
+  },
+  {
     "idConcurso": 1636,
     "fecha": "2026-05-23",
     "numeros": [
