@@ -1,5 +1,57 @@
 [
   {
+    "idConcurso": 1647,
+    "fecha": "2026-06-30",
+    "numeros": [
+      1,
+      2,
+      4,
+      8,
+      9,
+      35
+    ],
+    "adicional": 34
+  },
+  {
+    "idConcurso": 1646,
+    "fecha": "2026-06-27",
+    "numeros": [
+      4,
+      10,
+      24,
+      30,
+      34,
+      36
+    ],
+    "adicional": 16
+  },
+  {
+    "idConcurso": 1645,
+    "fecha": "2026-06-23",
+    "numeros": [
+      1,
+      2,
+      4,
+      7,
+      8,
+      21
+    ],
+    "adicional": 16
+  },
+  {
+    "idConcurso": 1644,
+    "fecha": "2026-06-20",
+    "numeros": [
+      1,
+      6,
+      10,
+      25,
+      28,
+      33
+    ],
+    "adicional": 21
+  },
+  {
     "idConcurso": 1643,
     "fecha": "2026-06-16",
     "numeros": [
